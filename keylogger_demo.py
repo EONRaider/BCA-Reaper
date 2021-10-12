@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# https://github.com/EONRaider/Keylogger
+# https://github.com/EONRaider/bca-keylogger
 
 __author__ = "EONRaider @ keybase.io/eonraider"
 
