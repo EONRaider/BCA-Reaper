@@ -6,12 +6,12 @@ __author__ = "EONRaider @ keybase.io/eonraider"
 import smtplib
 import ssl
 
-from src.modules.exfiltration.base import Exfiltrator, Exploit
+from src.modules.exfiltration.base import ExfiltrationModule, ExploitationModule
 
 
-class Email(Exfiltrator):
+class Email(ExfiltrationModule):
     def __init__(self, *,
-                 module: Exploit,
+                 module: ExploitationModule,
                  tag: str = None,
                  smtp_host: str,
                  smtp_port: int,

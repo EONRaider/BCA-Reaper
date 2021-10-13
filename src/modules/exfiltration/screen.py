@@ -3,12 +3,12 @@
 
 __author__ = "EONRaider @ keybase.io/eonraider"
 
-from src.modules.exfiltration.base import Exfiltrator, Exploit
+from src.modules.exfiltration.base import ExfiltrationModule, ExploitationModule
 
 
-class Screen(Exfiltrator):
+class Screen(ExfiltrationModule):
     def __init__(self, *,
-                 module: Exploit,
+                 module: ExploitationModule,
                  tag: str = None):
         super().__init__(module, tag)
 

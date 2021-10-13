@@ -5,12 +5,12 @@ __author__ = "EONRaider @ keybase.io/eonraider"
 
 from pathlib import Path
 
-from src.modules.exfiltration.base import Exfiltrator, Exploit
+from src.modules.exfiltration.base import ExfiltrationModule, ExploitationModule
 
 
-class File(Exfiltrator):
+class File(ExfiltrationModule):
     def __init__(self, *,
-                 module: Exploit,
+                 module: ExploitationModule,
                  tag: str = None,
                  file_path: [str, Path]):
         super().__init__(module, tag)
