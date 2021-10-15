@@ -7,11 +7,9 @@ from src.modules.exfiltration.base import ExfiltrationModule, ExploitationModule
 
 
 class Screen(ExfiltrationModule):
-    def __init__(self, *,
-                 module: ExploitationModule,
-                 tag: str = None):
-        super().__init__(module, tag)
+    def __init__(self, *, module: ExploitationModule):
+        super().__init__(module)
 
-    def update(self) -> None:
+    def update(self, message: str) -> None:
         """Display captured data at STDOUT for debugging purposes."""
-        print(self.report)
+        print(message)
