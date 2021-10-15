@@ -3,15 +3,13 @@
 
 __author__ = "EONRaider @ keybase.io/eonraider"
 
-from src.modules.exfiltration.base import Exfiltrator, Exploit
+from src.modules.exfiltration.base import ExfiltrationModule, ExploitationModule
 
 
-class Screen(Exfiltrator):
-    def __init__(self, *,
-                 module: Exploit,
-                 tag: str = None):
-        super().__init__(module, tag)
+class Screen(ExfiltrationModule):
+    def __init__(self, *, module: ExploitationModule):
+        super().__init__(module)
 
-    def update(self) -> None:
+    def update(self, message: str) -> None:
         """Display captured data at STDOUT for debugging purposes."""
-        print(self.report)
+        print(message)
