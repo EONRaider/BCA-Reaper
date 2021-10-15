@@ -5,6 +5,9 @@ __author__ = "EONRaider @ keybase.io/eonraider"
 
 import os
 import pathlib
+import sys
+
+sys.path.insert(0, str(pathlib.Path(__file__).parents[1]))
 
 from src.modules.exfiltration import Discord, Email, File, Screen
 from src.modules.exploitation import TCPScanner
