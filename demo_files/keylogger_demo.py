@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# https://github.com/EONRaider/bca-backdoor
+# https://github.com/EONRaider/bca-trojan
 
 __author__ = "EONRaider @ keybase.io/eonraider"
 
