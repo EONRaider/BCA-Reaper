@@ -45,7 +45,7 @@ Discord(module=scanner,
 
 # An email will be sent through a secure connection using SMTP
 Email(module=scanner,
-      smtp_host="smtp.gmail.com",
+      smtp_host=os.getenv("EMAIL_HOST"),
       smtp_port=465,
       email=os.getenv("EMAIL_USERNAME"),
       password=os.getenv("EMAIL_PASSWORD"))
