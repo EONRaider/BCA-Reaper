@@ -27,28 +27,35 @@ exfiltrator is to be used; similarly we need 'EMAIL_USERNAME' and
 
 dotenv.load_dotenv()
 
-# Set up the TCPScanner to send probes to internal and external targets
-scanner = TCPScanner(targets=("localhost", "testphp.vulnweb.com"),
-                     ports=(22, 80, 443),
-                     timeout=10.0)
+# Set up a TCPScanner to send probes to internal and external targets
+scanner_simple = TCPScanner(targets=("localhost", "testphp.vulnweb.com"),
+                            ports=(22, 80, 443),
+                            timeout=10)
 
-# Enable output of logs to STDOUT
-Screen(module=scanner)
+# Set up another TCPScanner to probe a range of internal targets
+scanner_cidr = TCPScanner.from_cidr(cidr_range="192.168.0.0/28",
+                                    ports=(22, 80, 443),
+                                    timeout=3)
 
-# A file will be written to the current user's Desktop
-File(module=scanner,
-     file_path=pathlib.Path.home().joinpath("Desktop/sample_scanner_log.txt"))
+for scanner in scanner_simple, scanner_cidr:
+    # Enable output of logs to STDOUT
+    Screen(module=scanner)
 
-# Scan results will be sent to a Discord server through a Webhook URL
-Discord(module=scanner,
-        webhook_url=os.getenv("WEBHOOK_URL"))
+    # A file will be written to the current user's Desktop
+    File(module=scanner,
+         file_path=pathlib.Path.home().joinpath(
+             f"Desktop/sample_{scanner.__class__.__name__}_log.txt"))
 
-# An email will be sent through a secure connection using SMTP
-Email(module=scanner,
-      smtp_host=os.getenv("EMAIL_HOST"),
-      smtp_port=465,
-      email=os.getenv("EMAIL_USERNAME"),
-      password=os.getenv("EMAIL_PASSWORD"))
+    # Scan results will be sent to a Discord server through a Webhook
+    Discord(module=scanner,
+            webhook_url=os.getenv("WEBHOOK_URL"))
 
-# Done. Perform all scans and proceed to exfiltration of data.
-scanner.execute()
+    # An email will be sent through a secure connection using SMTP
+    Email(module=scanner,
+          smtp_host=os.getenv("EMAIL_HOST"),
+          smtp_port=465,
+          email=os.getenv("EMAIL_USERNAME"),
+          password=os.getenv("EMAIL_PASSWORD"))
+
+    # Done. Perform all scans and proceed to exfiltration of data.
+    scanner.execute()
