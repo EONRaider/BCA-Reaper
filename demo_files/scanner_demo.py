@@ -33,9 +33,9 @@ scanner_simple = TCPScanner(targets=("localhost", "testphp.vulnweb.com"),
                             timeout=10)
 
 # Set up another TCPScanner to probe a range of internal targets
-scanner_cidr = TCPScanner.from_cidr(cidr_range="192.168.0.0/28",
-                                    ports=(22, 80, 443),
-                                    timeout=3)
+scanner_cidr = TCPScanner(targets="192.168.0.0/28",
+                          ports=(22, 80, 443),
+                          timeout=3)
 
 for scanner in scanner_simple, scanner_cidr:
     # Enable output of logs to STDOUT
