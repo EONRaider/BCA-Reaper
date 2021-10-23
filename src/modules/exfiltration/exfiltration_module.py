@@ -21,6 +21,6 @@ class ExfiltrationModule(abc.ABC):
         self.module.register_exfiltrator(self)
 
     @abc.abstractmethod
-    def update(self, message: str):
+    def update(self, message: [str, None]):
         """To be implemented with the logic specific to each
         exfiltration mechanism."""
