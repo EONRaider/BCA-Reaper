@@ -16,9 +16,8 @@ class Screen(ExfiltrationModule):
                 exfiltrator receive data by attaching itself as a
                 subscriber.
         """
-
         super().__init__(module)
 
-    def update(self, message: str) -> None:
+    def update(self, message: [str, None]) -> None:
         """Display captured data at STDOUT for debugging purposes."""
-        print(message)
+        print(message if message is not None else "<NO DATA>")

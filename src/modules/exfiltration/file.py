@@ -27,9 +27,9 @@ class File(ExfiltrationModule):
         super().__init__(module)
         self.file_path = file_path
 
-    def update(self, message: str) -> None:
+    def update(self, message: [str, None]) -> None:
         """Write each report on a new line of a text file with the
         specified path."""
-        if self.module.has_data is True:
+        if message is not None:
             with open(file=self.file_path, mode="a", encoding="utf_8") as file:
                 file.write(f"{message}\n")
