@@ -48,6 +48,14 @@ optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
 
 [[package]]
+name = "configdot"
+version = "0.10.1"
+description = "Config object with attribute access and INI parser"
+category = "main"
+optional = false
+python-versions = "*"
+
+[[package]]
 name = "discord"
 version = "1.7.3"
 description = "A mirror package for discord.py. Please install that instead."
@@ -206,7 +214,7 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.9"
-content-hash = "292844458b12891410414c925da5365c126a37a9380efa90cdeab2c9cda6c45a"
+content-hash = "73ddbf659ac3b05ccae70b6196ce7f2926632e2579a23db8831f48253e08794c"
 
 [metadata.files]
 aiohttp = [
@@ -259,6 +267,10 @@ attrs = [
 chardet = [
     {file = "chardet-4.0.0-py2.py3-none-any.whl", hash = "sha256:f864054d66fd9118f2e67044ac8981a54775ec5b67aed0441892edb553d21da5"},
     {file = "chardet-4.0.0.tar.gz", hash = "sha256:0d6f53a15db4120f2b08c94f11e7d93d2c911ee118b6b30a04ec3ee8310179fa"},
+]
+configdot = [
+    {file = "configdot-0.10.1-py3-none-any.whl", hash = "sha256:53300be0b4e12f29e66d0de22a1de14058f24a3392de131c66e942e5afb0d3eb"},
+    {file = "configdot-0.10.1.tar.gz", hash = "sha256:185f54890ae318bc95484f61b1d6d07ff7ecc2b68f2573508a0733c960c6eade"},
 ]
 discord = [
     {file = "discord-1.7.3-py3-none-any.whl", hash = "sha256:248d728356e149c818a81b94659047a19305ea1623d4810bbb342f6b7df55f36"},
