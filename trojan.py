@@ -105,4 +105,4 @@ if __name__ == "__main__":
                              "to trojan.ini.")
     args = parser.parse_args()
 
-    (trojan := TrojanConfig(config_file=args.config)).execute()
+    TrojanConfig(config_file=args.config).execute()
