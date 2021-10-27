@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
-# https://github.com/EONRaider/bca-backdoor
+# https://github.com/EONRaider/bca-trojan
 
 __author__ = "EONRaider @ keybase.io/eonraider"
 
 import abc
 
-from src.modules.exploitation.base import ExploitationModule
+from src.modules.exploitation.exploitation_module import ExploitationModule
 
 
 class ExfiltrationModule(abc.ABC):
@@ -14,13 +14,13 @@ class ExfiltrationModule(abc.ABC):
 
         Args:
             module (ExploitationModule): Instance of ExploitationModule
-                to which the exfiltrator receive data by attaching
+                from which the exfiltrator receive data by attaching
                 itself as a subscriber.
         """
         self.module = module
         self.module.register_exfiltrator(self)
 
     @abc.abstractmethod
-    def update(self, message: str):
+    def update(self, message: [str, None]):
         """To be implemented with the logic specific to each
         exfiltration mechanism."""
