@@ -13,9 +13,9 @@ class ExfiltrationModule(abc.ABC):
         """Interface for the implementation of all exfiltrators.
 
         Args:
-            module (ExploitationModule): Instance of ExploitationModule
-                from which the exfiltrator receive data by attaching
-                itself as a subscriber.
+            module: Instance of ExploitationModule from which the
+                exfiltrator receive data by attaching itself as a
+                subscriber.
         """
         self.module = module
         self.module.register_exfiltrator(self)

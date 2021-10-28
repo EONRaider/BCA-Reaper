@@ -5,7 +5,7 @@ __author__ = "EONRaider @ keybase.io/eonraider"
 
 import asyncio
 from pathlib import Path
-from typing import Any, Generator
+from typing import Iterator
 
 import aiohttp
 from discord import File, Webhook, AsyncWebhookAdapter
@@ -43,11 +43,11 @@ class Discord(ExfiltrationModule):
         if message is not None:
             asyncio.run(self._send_message(message))
 
-    def _split_message(self, message: str) -> Generator[str, Any, None]:
-        """Yield a generator of strings derived from the report of an
-        ExploitationModule. Each chunk corresponds to a sequence of
-        characters with length smaller than or equal to the character
-        limit imposed by the Discord service."""
+    def _split_message(self, message: str) -> Iterator[str]:
+        """Yield an iterator of strings derived from a single string.
+        Each string yielded corresponds to a sequence of characters with
+        length smaller than or equal to the character limit imposed by
+        the Discord service."""
         yield from (message[start:start+self._char_limit] for start in
                     range(0, len(message), self._char_limit))
 
