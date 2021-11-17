@@ -63,10 +63,10 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("-w", "--webhook",
                         type=str,
-                        metavar="WEBHOOK URL")
+                        metavar="<webhook_url>")
     parser.add_argument("-e", "--exfil-time",
                         type=float,
-                        metavar="SECONDS",
+                        metavar="<seconds>",
                         default=30)
     _args = parser.parse_args()
 

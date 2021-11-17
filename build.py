@@ -41,13 +41,13 @@ if __name__ == "__main__":
     parser.add_argument(
         "-w", "--webhook",
         type=str,
-        metavar="WEBHOOK URL",
+        metavar="<webhook_url>",
         required=True
     )
     parser.add_argument(
         "-e", "--exfil-time",
         type=float,
-        metavar="SECONDS",
+        metavar="<seconds>",
         default=30
     )
     parser.set_defaults(func=build)
