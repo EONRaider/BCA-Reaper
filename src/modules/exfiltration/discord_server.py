@@ -10,7 +10,7 @@ from typing import Iterator
 import aiohttp
 from discord import File, Webhook, AsyncWebhookAdapter
 
-from src.modules.exfiltration.exfiltration_module import ExfiltrationModule
+from src.modules import ExfiltrationModule
 
 
 class Discord(ExfiltrationModule):
