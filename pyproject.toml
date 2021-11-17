@@ -5,12 +5,13 @@ description = ""
 authors = ["EONRaider <livewire_voodoo@protonmail.com>"]
 
 [tool.poetry.dependencies]
-python = "^3.9"
+python = ">=3.9,<3.11"
 aiohttp = "^3.7.4"
 discord = "^1.7.3"
 pynput = "^1.7.4"
 mss = "^6.1.0"
 configdot = "^0.10.1"
+pyinstaller = "^4.7"
 
 [tool.poetry.dev-dependencies]
 
