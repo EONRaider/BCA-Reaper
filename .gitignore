@@ -142,4 +142,4 @@ cython_debug/
 .idea
 
 # Project files
-trojan.cfg
+config.py
