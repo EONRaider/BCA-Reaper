@@ -4,8 +4,14 @@
 __author__ = "EONRaider @ keybase.io/eonraider"
 
 import argparse
+from platform import system
 
 import PyInstaller.__main__ as pyinstaller
+
+
+def os_name() -> str:
+    """Gets the name of the current operating system."""
+    return system().lower()
 
 
 def build(args: argparse.Namespace) -> None:
@@ -22,7 +28,11 @@ def build(args: argparse.Namespace) -> None:
         for key, value in config.items():
             config_file.write(f"{key} = '{value}'\n")
 
-    cmd = "src/reaper.py", "--onefile", "--hidden-import", "config"
+    cmd = (
+        "src/reaper.py", "--onefile",
+        "--hidden-import", "config",
+        "--name", f"{os_name()}_reaper"
+    )
 
     pyinstaller.run(cmd)
 
