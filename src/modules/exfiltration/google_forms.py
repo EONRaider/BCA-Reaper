@@ -69,8 +69,11 @@ class GoogleForms(ExfiltrationModule):
 
     def _fetch_form(self) -> str:
         """Fetch a form through an HTTP GET request."""
-        with request.urlopen(url=self.form_url) as html:
-            contents = html.read()
+        try:
+            with request.urlopen(url=self.form_url) as html:
+                contents = html.read()
+        except ValueError:
+            raise SystemExit(f"Error: Invalid URL '{self.form_url}'")
         return str(contents)
 
     def _send_message(self, message: str) -> None:
