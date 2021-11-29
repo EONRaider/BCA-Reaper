@@ -26,7 +26,8 @@ def build(args: argparse.Namespace) -> None:
 
     with open(file="src/config.py", mode="w") as config_file:
         for key, value in config.items():
-            config_file.write(f"{key} = '{value}'\n")
+            value = None if value is None else f"'{value}'"
+            config_file.write(f"{key} = {value}\n")
 
     cmd = (
         "src/reaper.py", "--onefile",
