@@ -9,11 +9,6 @@ from platform import system
 import PyInstaller.__main__ as pyinstaller
 
 
-def os_name() -> str:
-    """Gets the name of the current operating system."""
-    return system().lower()
-
-
 def build(args: argparse.Namespace) -> None:
     """Set-up the arguments required by PyInstaller to build the Reaper
     binary."""
@@ -26,13 +21,13 @@ def build(args: argparse.Namespace) -> None:
 
     with open(file="src/config.py", mode="w") as config_file:
         for key, value in config.items():
-            value = None if value is None else f"'{value}'"
+            value = value if not isinstance(value, str) else f"'{value}'"
             config_file.write(f"{key} = {value}\n")
 
     cmd = (
         "src/reaper.py", "--onefile",
         "--hidden-import", "config",
-        "--name", f"{os_name()}_reaper"
+        "--name", f"{system().lower()}_reaper"
     )
 
     pyinstaller.run(cmd)
