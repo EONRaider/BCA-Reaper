@@ -72,8 +72,8 @@ below.
 ```
 usage: reaper.py [-h] [-w <webhook_url>] [-f <google_forms_url>] [-e <seconds>]
 
-BCA Reaper - Log keystrokes, take screenshots, grab system information and exfiltrate to Discord 
-and Google Forms
+BCA Reaper - Log keystrokes, take screenshots and grab system information from a target host 
+and exfiltrate to Discord and Google Forms
 
 optional arguments:
   -h, --help            show this help message and exit
