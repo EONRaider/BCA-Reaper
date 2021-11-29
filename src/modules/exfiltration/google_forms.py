@@ -64,7 +64,7 @@ class GoogleForms(ExfiltrationModule):
     def update(self, message: [str, None]) -> None:
         """Send each report as a new answer to a remote instance of
         Google Forms."""
-        if message is not None:
+        if isinstance(message, str):
             self._send_message(message)
 
     def _fetch_form(self) -> str:
