@@ -95,7 +95,7 @@ class Reaper:
                 executor.submit(exploit.execute)
 
 
-def parse_cli() -> argparse.Namespace:
+def parse_cli() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         description="BCA Reaper - Log keystrokes, take screenshots and grab "
                     "system information from a target host and exfiltrate to "
@@ -123,11 +123,11 @@ def parse_cli() -> argparse.Namespace:
              "to perform a single operation."
     )
 
-    return parser.parse_args()
+    return parser
 
 
 if __name__ == "__main__":
-    _args = parse_cli()
+    _args = parse_cli().parse_args()
 
     try:
         '''Reaper is executed as a binary compiled by PyInstaller. All 
