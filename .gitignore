@@ -143,4 +143,4 @@ cython_debug/
 # Project files
 config.py
 dev_linux_reaper
-dev_windows_reaper
+dev_windows_reaper.exe
