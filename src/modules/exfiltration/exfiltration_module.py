@@ -1,26 +1,24 @@
 #!/usr/bin/env python3
-# https://github.com/EONRaider/bca-trojan
+# https://github.com/EONRaider/BCA-Reaper
 
 __author__ = "EONRaider @ keybase.io/eonraider"
 
-import abc
-
-from src.modules.exploitation.exploitation_module import ExploitationModule
+from abc import abstractmethod, ABC
 
 
-class ExfiltrationModule(abc.ABC):
-    def __init__(self, module: ExploitationModule):
+class ExfiltrationModule(ABC):
+    def __init__(self, module):
         """Interface for the implementation of all exfiltrators.
 
-        Args:
-            module (ExploitationModule): Instance of ExploitationModule
-                from which the exfiltrator receive data by attaching
-                itself as a subscriber.
+        :param module: Instance of ExploitationModule from which the
+            exfiltrator receive data by attaching itself as a
+            subscriber.
         """
         self.module = module
         self.module.register_exfiltrator(self)
 
-    @abc.abstractmethod
+    @abstractmethod
     def update(self, message: [str, None]):
         """To be implemented with the logic specific to each
         exfiltration mechanism."""
+        ...
