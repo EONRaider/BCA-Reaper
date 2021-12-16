@@ -24,6 +24,9 @@ All data is exfiltrated to a **Discord** server and/or **Google Forms** instance
 Linux and Windows binaries are [available for download](https://github.com/EONRaider/BCA-Reaper/tree/master/dist) 
 for portability and ease of execution.
 
+## Demo
+![demo](https://github.com/EONRaider/static/blob/c506b24d4c8863e8cfddc48d86bf3ca2f6b1398a/reaper/reaper-demo.jpg)
+
 ## Setup
 All you need to run Reaper is a free Discord server and/or a 
 Google Forms instance. You need at least one of the methods for successful 
