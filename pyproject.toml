@@ -6,7 +6,7 @@ authors = ["EONRaider <livewire_voodoo@protonmail.com>"]
 
 [tool.poetry.dependencies]
 python = ">=3.9,<3.11"
-aiohttp = "^3.7.4"
+aiohttp = "^3.8.5"
 discord = "^1.7.3"
 pynput = "^1.7.4"
 mss = "^6.1.0"
